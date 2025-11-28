@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Prediction History</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>body { font-family: 'Inter', sans-serif; }</style>
+</head>
+<body class="bg-gradient-to-br from-green-50 via-white to-amber-50 min-h-screen">
+
+  <header class="max-w-6xl mx-auto p-6 flex items-center justify-between">
+    <h1 class="text-3xl font-semibold text-gray-800">Your Prediction History</h1>
+    <div class="flex gap-4">
+      <a href="/home" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">← Back to Main</a>
+      <form action="/login" method="get">
+        <button type="submit" class="px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-100 transition">Logout</button>
+      </form>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto p-6">
+    <div id="errorBox" class="hidden text-red-600 mb-4"></div>
+    <div id="historyContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    <p id="noData" class="hidden text-gray-600 text-center mt-8">No predictions found yet.</p>
+  </main>
+
+  <footer class="text-center text-sm text-gray-500 py-6">
+    © 2025 Plant • Built with ❤️ using Vision Transformers
+  </footer>
+
+  <script>
+    async function loadHistory() {
+      const res = await fetch('/api/history');
+      const container = document.getElementById('historyContainer');
+      const noData = document.getElementById('noData');
+      const errorBox = document.getElementById('errorBox');
+
+      if (res.status === 401) {
+        errorBox.classList.remove('hidden');
+        errorBox.textContent = "You must be logged in to view history. Redirecting to login...";
+        setTimeout(() => window.location.href = '/login', 1200);
+        return;
+      }
+
+      if (!res.ok) {
+        const txt = await res.json().catch(()=>null);
+        errorBox.classList.remove('hidden');
+        errorBox.textContent = "Error loading history. " + (txt && txt.details ? txt.details : '');
+        container.innerHTML = '';
+        return;
+      }
+
+      const response = await res.json();
+      const data = response.history || [];
+
+      if (data.length === 0) {
+        noData.classList.remove('hidden');
+        return;
+      }
+
+      data.forEach(entry => {
+        const card = document.createElement('div');
+        card.className = "bg-white rounded-xl shadow p-4 border border-gray-100";
+        const saliencyHtml = entry.saliency_path ? `<img src="${entry.saliency_path}" class="rounded-lg mt-3 w-full h-32 object-contain border border-gray-100" alt="Saliency">` : '';
+        card.innerHTML = `
+          <img src="${entry.image_path}" alt="uploaded leaf" class="rounded-lg w-full h-40 object-cover mb-3" />
+          <h3 class="font-semibold text-lg text-gray-800">${entry.leaf || 'Leaf'}</h3>
+          <p class="text-sm text-gray-600">Disease: <strong>${entry.disease}</strong></p>
+          <p class="text-sm text-gray-600">Confidence: <strong>${entry.confidence}%</strong></p>
+          <p class="text-sm text-gray-600">Severity: <strong>${entry.severity}%</strong></p>
+          <p class="text-xs text-gray-400 mt-2">Date: ${new Date(entry.created_at).toLocaleString()}</p>
+          ${saliencyHtml}
+        `;
+        container.appendChild(card);
+      });
+    }
+    loadHistory();
+  </script>
+</body>
+</html>

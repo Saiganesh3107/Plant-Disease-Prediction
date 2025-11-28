@@ -1,0 +1,28 @@
+CREATE DATABASE IF NOT EXISTS plant_disease_db
+  CHARACTER SET utf8mb4
+  COLLATE utf8mb4_unicode_ci;
+
+USE plant_disease_db;
+
+CREATE TABLE IF NOT EXISTS users1 (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  firstname VARCHAR(100) NOT NULL,
+  lastname VARCHAR(100) NOT NULL,
+  username VARCHAR(100) NOT NULL UNIQUE,
+  password_hash VARCHAR(255) NOT NULL,
+  phone_number VARCHAR(20),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS predictions (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NULL,
+  image_path VARCHAR(512) NOT NULL,
+  leaf VARCHAR(100),              
+  disease VARCHAR(200),
+  confidence FLOAT NOT NULL,
+  severity FLOAT DEFAULT 0,
+  saliency_path VARCHAR(512),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users1(id) ON DELETE SET NULL
+) ENGINE=InnoDB;
