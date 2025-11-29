@@ -210,6 +210,23 @@ python app.py
 ```
 http://127.0.0.1:5000
 ```
+
+## Login Page:
+<img width="637" height="576" alt="Screenshot 2025-11-29 144746" src="https://github.com/user-attachments/assets/80e7bd7a-2b6c-4be6-a935-52e2b6434dcb" />
+
+## Register Page:
+<img width="695" height="837" alt="Screenshot 2025-11-29 144803" src="https://github.com/user-attachments/assets/012f8784-b5ce-4d0a-8e44-f1ddc111758d" />
+
+## Main Page:
+<img width="1623" height="821" alt="Screenshot 2025-11-29 144842" src="https://github.com/user-attachments/assets/aed704fd-e1a2-43bb-a919-c50029775de4" />
+
+## Output Page:
+<img width="1147" height="860" alt="Screenshot 2025-11-29 144932" src="https://github.com/user-attachments/assets/b9a43267-87bf-4f44-8749-bc62875cd5da" />
+
+## History Page:
+<img width="1525" height="847" alt="Screenshot 2025-11-29 144959" src="https://github.com/user-attachments/assets/4c049f40-cc6b-443a-885c-5faa7538b438" />
+
+
 ## 🌾 Use Cases
 
 - Farmer disease identification
@@ -235,4 +252,3 @@ http://127.0.0.1:5000
 - Explainability (Saliency Maps)
 
 - Database systems (MySQL)
-#
